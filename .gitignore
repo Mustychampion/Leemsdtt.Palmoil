@@ -16,9 +16,11 @@ dist-ssr
 .nitro
 *.local
 
-# Wrangler / Cloudflare
-.wrangler/
-.dev.vars
+# Vercel
+.vercel
+
+# Firebase (local emulator cache)
+.firebase/
 
 # Editor directories and files
 .vscode/*
