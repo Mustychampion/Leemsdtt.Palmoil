@@ -1,146 +1,127 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { auth } from "@/integrations/firebase/client";
-import { useAuth, hasAnyRole } from "@/hooks/useAuth";
+import { onAuthStateChanged, signOut, type User } from "firebase/auth";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Toaster } from "@/components/ui/sonner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SubmissionsTable } from "@/components/admin/SubmissionsTable";
 import { TeamManagement } from "@/components/admin/TeamManagement";
-import logo from "@/assets/leemsdtt-logo.png";
-import { LogOut, ShieldCheck } from "lucide-react";
+import { PriceManagement } from "@/components/admin/PriceManagement";
+import { Link } from "@tanstack/react-router";
+import { LogOut, ExternalLink, ShieldCheck, Mail, Users, Tag, Truck, MessageSquare } from "lucide-react";
+import { getSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({
-    meta: [
-      { title: "LeemsDTT Admin Dashboard" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+  head: () => getSeoMeta({
+    title: "Admin Portal — LeemsDTT Internal",
+    description: "LeemsDTT internal administration portal.",
+    path: "/admin",
+    noIndex: true,
   }),
   component: AdminPage,
 });
 
 function AdminPage() {
-  const navigate = useNavigate();
-  const { loading, user, roles } = useAuth();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!loading && !user) navigate({ to: "/login" });
-  }, [loading, user, navigate]);
+    const unsubscribe = onAuthStateChanged(auth, (u) => {
+      setUser(u);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
 
-  if (loading || !user) {
-    return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Loading…</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center text-muted-foreground text-sm">
+        Loading admin session...
+      </div>
+    );
   }
 
-  const isSuperAdmin = roles.includes("super_admin");
-  const canSeeSubmissions = hasAnyRole(roles, ["super_admin", "sales", "support"]);
-  const canEditSubmissions = hasAnyRole(roles, ["super_admin", "sales"]);
-
-  const signOut = async () => {
-    await auth.signOut();
-    navigate({ to: "/login" });
-  };
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6 text-center space-y-4">
+        <ShieldCheck className="h-12 w-12 text-primary" />
+        <h1 className="font-display text-2xl text-foreground font-bold">Authentication Required</h1>
+        <p className="text-sm text-muted-foreground max-w-sm">
+          You must be signed in with an authorized team account to access the administration portal.
+        </p>
+        <Button asChild variant="gold">
+          <Link to="/login">Sign In to Staff Account</Link>
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-secondary/30">
-      <header className="bg-background border-b border-border sticky top-0 z-40">
-        <div className="container mx-auto px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <img src={logo} alt="LeemsDTT" className="h-9 w-9" />
-            <div className="font-display text-base">LeemsDTT Admin</div>
-          </Link>
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2">
-              {roles.length === 0 ? (
-                <Badge variant="outline">No role assigned</Badge>
-              ) : roles.map((r) => <Badge key={r} variant="secondary">{r}</Badge>)}
-            </div>
-            <div className="text-sm text-muted-foreground hidden md:block">{user.email}</div>
-            <Button variant="outline" size="sm" onClick={signOut}>
-              <LogOut className="h-4 w-4" /> Sign out
-            </Button>
-          </div>
+      <header className="bg-background border-b border-border px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="font-display text-lg font-bold text-foreground">LeemsDTT Admin</div>
+          <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded font-medium">Internal</span>
+        </div>
+        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <span>{user.email}</span>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => signOut(auth)}
+            className="text-muted-foreground hover:text-destructive text-xs"
+          >
+            <LogOut className="h-3.5 w-3.5 mr-1" /> Sign Out
+          </Button>
+          <Button asChild variant="outline" size="sm" className="text-xs">
+            <Link to="/" target="_blank">
+              View Public Site <ExternalLink className="h-3 w-3 ml-1" />
+            </Link>
+          </Button>
         </div>
       </header>
+
       <main className="container mx-auto px-6 py-8">
-        {roles.length === 0 && (
-          <div className="mb-6 rounded-xl border border-border bg-background p-6">
-            <div className="flex items-start gap-4">
-              <ShieldCheck className="h-6 w-6 text-primary shrink-0 mt-1" />
-              <div className="flex-1">
-                <div className="font-display text-lg text-foreground">No role assigned</div>
-                <p className="text-sm text-muted-foreground mb-3">
-                  A Super Admin must assign you a role before you can view submissions. Contact your Super Admin to be granted access.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+        <Tabs defaultValue="inquiries" className="space-y-6">
+          <TabsList className="bg-background border border-border flex flex-wrap h-auto p-1 gap-1">
+            <TabsTrigger value="inquiries" className="flex items-center gap-1.5 text-xs">
+              <MessageSquare className="h-3.5 w-3.5" /> Customer Inquiries
+            </TabsTrigger>
+            <TabsTrigger value="distributors" className="flex items-center gap-1.5 text-xs">
+              <Truck className="h-3.5 w-3.5" /> Distributor Apps
+            </TabsTrigger>
+            <TabsTrigger value="quotes" className="flex items-center gap-1.5 text-xs">
+              <Mail className="h-3.5 w-3.5" /> Bulk Quotes
+            </TabsTrigger>
+            <TabsTrigger value="prices" className="flex items-center gap-1.5 text-xs">
+              <Tag className="h-3.5 w-3.5" /> Product Prices
+            </TabsTrigger>
+            <TabsTrigger value="team" className="flex items-center gap-1.5 text-xs">
+              <Users className="h-3.5 w-3.5" /> Team Staff
+            </TabsTrigger>
+          </TabsList>
 
-        {canSeeSubmissions && (
-          <Tabs defaultValue="inquiries">
-            <TabsList>
-              <TabsTrigger value="inquiries">Contact inquiries</TabsTrigger>
-              <TabsTrigger value="bulk">Bulk quotes</TabsTrigger>
-              <TabsTrigger value="distributors">Distributor applications</TabsTrigger>
-              {isSuperAdmin && <TabsTrigger value="team">Team</TabsTrigger>}
-            </TabsList>
-            <TabsContent value="inquiries" className="mt-6">
-              <SubmissionsTable
-                table="inquiries"
-                canEdit={canEditSubmissions}
-                canDelete={isSuperAdmin}
-                columns={[
-                  { key: "full_name", label: "Name" },
-                  { key: "email", label: "Email" },
-                  { key: "phone", label: "Phone" },
-                  { key: "preferred_size", label: "Size" },
-                  { key: "quantity", label: "Quantity" },
-                ]}
-              />
-            </TabsContent>
-            <TabsContent value="bulk" className="mt-6">
-              <SubmissionsTable
-                table="bulk_quotes"
-                canEdit={canEditSubmissions}
-                canDelete={isSuperAdmin}
-                columns={[
-                  { key: "business_name", label: "Business" },
-                  { key: "business_type", label: "Type" },
-                  { key: "email", label: "Email" },
-                  { key: "monthly_volume", label: "Volume" },
-                  { key: "delivery_location", label: "Location" },
-                ]}
-              />
-            </TabsContent>
-            <TabsContent value="distributors" className="mt-6">
-              <SubmissionsTable
-                table="distributor_applications"
-                canEdit={canEditSubmissions}
-                canDelete={isSuperAdmin}
-                columns={[
-                  { key: "full_name", label: "Name" },
-                  { key: "business_name", label: "Business" },
-                  { key: "email", label: "Email" },
-                  { key: "phone", label: "Phone" },
-                  { key: "region", label: "Region" },
-                ]}
-              />
-            </TabsContent>
-            {isSuperAdmin && (
-              <TabsContent value="team" className="mt-6"><TeamManagement /></TabsContent>
-            )}
-          </Tabs>
-        )}
+          <TabsContent value="inquiries" className="space-y-4">
+            <SubmissionsTable table="inquiries" canEdit={true} canDelete={true} />
+          </TabsContent>
 
-        {!canSeeSubmissions && roles.length > 0 && (
-          <div className="rounded-xl border border-border bg-background p-8 text-center text-muted-foreground">
-            Your role ({roles.join(", ")}) does not have access to submissions. Contact a Super Admin if you need access.
-          </div>
-        )}
+          <TabsContent value="distributors" className="space-y-4">
+            <SubmissionsTable table="distributor_applications" canEdit={true} canDelete={true} />
+          </TabsContent>
+
+          <TabsContent value="quotes" className="space-y-4">
+            <SubmissionsTable table="bulk_quotes" canEdit={true} canDelete={true} />
+          </TabsContent>
+
+          <TabsContent value="prices" className="space-y-4">
+            <PriceManagement />
+          </TabsContent>
+
+          <TabsContent value="team" className="space-y-4">
+            <TeamManagement />
+          </TabsContent>
+        </Tabs>
       </main>
-      <Toaster />
     </div>
   );
 }

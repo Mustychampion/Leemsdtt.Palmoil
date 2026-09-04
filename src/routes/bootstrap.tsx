@@ -12,13 +12,14 @@ import { ShieldCheck } from "lucide-react";
 import { auth, db } from "@/integrations/firebase/client";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, addDoc, collection } from "firebase/firestore";
+import { getSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/bootstrap")({
-  head: () => ({
-    meta: [
-      { title: "First-time Setup — LeemsDTT" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+  head: () => getSeoMeta({
+    title: "First-time Setup — LeemsDTT",
+    description: "Internal Super Admin initialization.",
+    path: "/bootstrap",
+    noIndex: true,
   }),
   component: BootstrapPage,
 });
@@ -55,7 +56,7 @@ function BootstrapPage() {
   };
 
   if (checking) {
-    return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Checking…</div>;
+    return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Checking setup status...</div>;
   }
 
   return (
@@ -63,7 +64,7 @@ function BootstrapPage() {
       <div className="w-full max-w-md bg-background rounded-2xl shadow-elegant p-8 space-y-6">
         <Link to="/" className="flex items-center gap-3 justify-center">
           <img src={logo} alt="LeemsDTT" className="h-12 w-12" />
-          <div className="font-display text-xl text-foreground">LeemsDTT · First-time Setup</div>
+          <div className="font-display text-xl text-foreground">LeemsDTT — First-time Setup</div>
         </Link>
         {closed ? (
           <div className="text-center space-y-3">
@@ -76,7 +77,7 @@ function BootstrapPage() {
           <>
             <div className="text-center">
               <h1 className="font-display text-2xl">Create the first Super Admin</h1>
-              <p className="text-sm text-muted-foreground mt-1">This form only works once. Enter the bootstrap secret from your Cloud secrets to continue.</p>
+              <p className="text-sm text-muted-foreground mt-1">This form only works once. Enter the bootstrap secret to continue.</p>
             </div>
             <form onSubmit={onSubmit} className="space-y-4">
               <div className="space-y-2">
@@ -96,7 +97,7 @@ function BootstrapPage() {
                 <Input id="password" type="password" required minLength={8} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
               </div>
               <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
-                {loading ? "Creating…" : "Create Super Admin"}
+                {loading ? "Creating..." : "Create Super Admin"}
               </Button>
             </form>
           </>

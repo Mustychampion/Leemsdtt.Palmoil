@@ -1,21 +1,21 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { auth } from "@/integrations/firebase/client";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import { auth } from "@/integrations/firebase/client";
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import logo from "@/assets/leemsdtt-logo.png";
+import { getSeoMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/login")({
-  head: () => ({
-    meta: [
-      { title: "Team Login — LeemsDTT Admin" },
-      { name: "description", content: "LeemsDTT internal team login." },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+  head: () => getSeoMeta({
+    title: "Team Login — LeemsDTT Admin",
+    description: "LeemsDTT internal staff sign-in.",
+    path: "/login",
+    noIndex: true,
   }),
   component: LoginPage,
 });
@@ -68,7 +68,7 @@ function LoginPage() {
             <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
           </div>
           <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
-            {loading ? "Please wait…" : "Sign in"}
+            {loading ? "Please wait..." : "Sign in"}
           </Button>
         </form>
         <div className="text-center text-xs text-muted-foreground">

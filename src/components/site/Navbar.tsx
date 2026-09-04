@@ -9,6 +9,8 @@ const nav = [
   { label: "Products", to: "/products" },
   { label: "Bulk Supply", to: "/bulk-supply" },
   { label: "Distributors", to: "/distributors" },
+  { label: "Quality", to: "/quality" },
+  { label: "Industries", to: "/industries" },
   { label: "About", to: "/about" },
   { label: "Contact", to: "/contact" },
 ];
@@ -16,16 +18,19 @@ const nav = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [hasSession, setHasSession] = useState(false);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => setHasSession(!!user));
     return () => unsubscribe();
   }, []);
+
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
@@ -46,15 +51,15 @@ export function Navbar() {
             </div>
           </div>
         </Link>
-        <nav className="hidden lg:flex items-center gap-8">
+        <nav className="hidden lg:flex items-center gap-7">
           {nav.map((n) => (
             <Link
               key={n.to}
-              to={n.to}
+              to={n.to as any}
               className={`text-sm font-medium transition-colors ${
                 scrolled ? "text-foreground/80 hover:text-primary" : "text-white/85 hover:text-[var(--gold)]"
               }`}
-              activeProps={{ className: scrolled ? "text-primary" : "text-[var(--gold)]" }}
+              activeProps={{ className: scrolled ? "text-primary font-semibold" : "text-[var(--gold)] font-semibold" }}
             >
               {n.label}
             </Link>

@@ -1,0 +1,29 @@
+# LeemsDTT Production Robots.txt
+# Entity: ValorTrust Integrated Services Ltd (RC 9268182)
+# Site: https://www.leemsdtt.name.ng
+
+User-agent: *
+Allow: /
+Allow: /products
+Allow: /products/*
+Allow: /bulk-supply
+Allow: /distributors
+Allow: /quality
+Allow: /industries
+Allow: /industries/*
+Allow: /insights
+Allow: /insights/*
+Allow: /about
+Allow: /contact
+Allow: /images/*
+Allow: /assets/*
+
+# Disallow Private & Admin Application Routes
+Disallow: /admin
+Disallow: /login
+Disallow: /bootstrap
+Disallow: /api/
+Disallow: /_*
+
+# Sitemap Location
+Sitemap: https://www.leemsdtt.name.ng/sitemap.xml

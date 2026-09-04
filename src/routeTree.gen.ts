@@ -18,6 +18,18 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DistributorsRouteImport } from './routes/distributors'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProductsRouteImport } from './routes/products'
+import { Route as QualityRouteImport } from './routes/quality'
+import { Route as IndustriesIndexRouteImport } from './routes/industries/index'
+import { Route as IndustriesHotelsRouteImport } from './routes/industries/hotels'
+import { Route as IndustriesRestaurantsRouteImport } from './routes/industries/restaurants'
+import { Route as IndustriesSupermarketsRouteImport } from './routes/industries/supermarkets'
+import { Route as IndustriesWholesalersRouteImport } from './routes/industries/wholesalers'
+import { Route as InsightsIndexRouteImport } from './routes/insights/index'
+import { Route as Products1lPalmOilRouteImport } from './routes/products/1l-palm-oil'
+import { Route as Products25lPalmOilRouteImport } from './routes/products/25l-palm-oil'
+import { Route as Products3lPalmOilRouteImport } from './routes/products/3l-palm-oil'
+import { Route as Products500mlPalmOilRouteImport } from './routes/products/500ml-palm-oil'
+import { Route as Products5lPalmOilRouteImport } from './routes/products/5l-palm-oil'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +76,66 @@ const ProductsRoute = ProductsRouteImport.update({
   path: '/products',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QualityRoute = QualityRouteImport.update({
+  id: '/quality',
+  path: '/quality',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesIndexRoute = IndustriesIndexRouteImport.update({
+  id: '/industries/',
+  path: '/industries/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesHotelsRoute = IndustriesHotelsRouteImport.update({
+  id: '/industries/hotels',
+  path: '/industries/hotels',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesRestaurantsRoute = IndustriesRestaurantsRouteImport.update({
+  id: '/industries/restaurants',
+  path: '/industries/restaurants',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesSupermarketsRoute = IndustriesSupermarketsRouteImport.update({
+  id: '/industries/supermarkets',
+  path: '/industries/supermarkets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndustriesWholesalersRoute = IndustriesWholesalersRouteImport.update({
+  id: '/industries/wholesalers',
+  path: '/industries/wholesalers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsightsIndexRoute = InsightsIndexRouteImport.update({
+  id: '/insights/',
+  path: '/insights/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Products1lPalmOilRoute = Products1lPalmOilRouteImport.update({
+  id: '/1l-palm-oil',
+  path: '/1l-palm-oil',
+  getParentRoute: () => ProductsRoute,
+} as any)
+const Products25lPalmOilRoute = Products25lPalmOilRouteImport.update({
+  id: '/25l-palm-oil',
+  path: '/25l-palm-oil',
+  getParentRoute: () => ProductsRoute,
+} as any)
+const Products3lPalmOilRoute = Products3lPalmOilRouteImport.update({
+  id: '/3l-palm-oil',
+  path: '/3l-palm-oil',
+  getParentRoute: () => ProductsRoute,
+} as any)
+const Products500mlPalmOilRoute = Products500mlPalmOilRouteImport.update({
+  id: '/500ml-palm-oil',
+  path: '/500ml-palm-oil',
+  getParentRoute: () => ProductsRoute,
+} as any)
+const Products5lPalmOilRoute = Products5lPalmOilRouteImport.update({
+  id: '/5l-palm-oil',
+  path: '/5l-palm-oil',
+  getParentRoute: () => ProductsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,7 +146,19 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/distributors': typeof DistributorsRoute
   '/login': typeof LoginRoute
-  '/products': typeof ProductsRoute
+  '/products': typeof ProductsRouteWithChildren
+  '/quality': typeof QualityRoute
+  '/industries/hotels': typeof IndustriesHotelsRoute
+  '/industries/restaurants': typeof IndustriesRestaurantsRoute
+  '/industries/supermarkets': typeof IndustriesSupermarketsRoute
+  '/industries/wholesalers': typeof IndustriesWholesalersRoute
+  '/products/1l-palm-oil': typeof Products1lPalmOilRoute
+  '/products/25l-palm-oil': typeof Products25lPalmOilRoute
+  '/products/3l-palm-oil': typeof Products3lPalmOilRoute
+  '/products/500ml-palm-oil': typeof Products500mlPalmOilRoute
+  '/products/5l-palm-oil': typeof Products5lPalmOilRoute
+  '/industries/': typeof IndustriesIndexRoute
+  '/insights/': typeof InsightsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -85,7 +169,19 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/distributors': typeof DistributorsRoute
   '/login': typeof LoginRoute
-  '/products': typeof ProductsRoute
+  '/products': typeof ProductsRouteWithChildren
+  '/quality': typeof QualityRoute
+  '/industries/hotels': typeof IndustriesHotelsRoute
+  '/industries/restaurants': typeof IndustriesRestaurantsRoute
+  '/industries/supermarkets': typeof IndustriesSupermarketsRoute
+  '/industries/wholesalers': typeof IndustriesWholesalersRoute
+  '/products/1l-palm-oil': typeof Products1lPalmOilRoute
+  '/products/25l-palm-oil': typeof Products25lPalmOilRoute
+  '/products/3l-palm-oil': typeof Products3lPalmOilRoute
+  '/products/500ml-palm-oil': typeof Products500mlPalmOilRoute
+  '/products/5l-palm-oil': typeof Products5lPalmOilRoute
+  '/industries': typeof IndustriesIndexRoute
+  '/insights': typeof InsightsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -97,7 +193,19 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/distributors': typeof DistributorsRoute
   '/login': typeof LoginRoute
-  '/products': typeof ProductsRoute
+  '/products': typeof ProductsRouteWithChildren
+  '/quality': typeof QualityRoute
+  '/industries/hotels': typeof IndustriesHotelsRoute
+  '/industries/restaurants': typeof IndustriesRestaurantsRoute
+  '/industries/supermarkets': typeof IndustriesSupermarketsRoute
+  '/industries/wholesalers': typeof IndustriesWholesalersRoute
+  '/products/1l-palm-oil': typeof Products1lPalmOilRoute
+  '/products/25l-palm-oil': typeof Products25lPalmOilRoute
+  '/products/3l-palm-oil': typeof Products3lPalmOilRoute
+  '/products/500ml-palm-oil': typeof Products500mlPalmOilRoute
+  '/products/5l-palm-oil': typeof Products5lPalmOilRoute
+  '/industries/': typeof IndustriesIndexRoute
+  '/insights/': typeof InsightsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +219,18 @@ export interface FileRouteTypes {
     | '/distributors'
     | '/login'
     | '/products'
+    | '/quality'
+    | '/industries/hotels'
+    | '/industries/restaurants'
+    | '/industries/supermarkets'
+    | '/industries/wholesalers'
+    | '/products/1l-palm-oil'
+    | '/products/25l-palm-oil'
+    | '/products/3l-palm-oil'
+    | '/products/500ml-palm-oil'
+    | '/products/5l-palm-oil'
+    | '/industries/'
+    | '/insights/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +242,18 @@ export interface FileRouteTypes {
     | '/distributors'
     | '/login'
     | '/products'
+    | '/quality'
+    | '/industries/hotels'
+    | '/industries/restaurants'
+    | '/industries/supermarkets'
+    | '/industries/wholesalers'
+    | '/products/1l-palm-oil'
+    | '/products/25l-palm-oil'
+    | '/products/3l-palm-oil'
+    | '/products/500ml-palm-oil'
+    | '/products/5l-palm-oil'
+    | '/industries'
+    | '/insights'
   id:
     | '__root__'
     | '/'
@@ -133,6 +265,18 @@ export interface FileRouteTypes {
     | '/distributors'
     | '/login'
     | '/products'
+    | '/quality'
+    | '/industries/hotels'
+    | '/industries/restaurants'
+    | '/industries/supermarkets'
+    | '/industries/wholesalers'
+    | '/products/1l-palm-oil'
+    | '/products/25l-palm-oil'
+    | '/products/3l-palm-oil'
+    | '/products/500ml-palm-oil'
+    | '/products/5l-palm-oil'
+    | '/industries/'
+    | '/insights/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -144,7 +288,14 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   DistributorsRoute: typeof DistributorsRoute
   LoginRoute: typeof LoginRoute
-  ProductsRoute: typeof ProductsRoute
+  ProductsRoute: typeof ProductsRouteWithChildren
+  QualityRoute: typeof QualityRoute
+  IndustriesHotelsRoute: typeof IndustriesHotelsRoute
+  IndustriesRestaurantsRoute: typeof IndustriesRestaurantsRoute
+  IndustriesSupermarketsRoute: typeof IndustriesSupermarketsRoute
+  IndustriesWholesalersRoute: typeof IndustriesWholesalersRoute
+  IndustriesIndexRoute: typeof IndustriesIndexRoute
+  InsightsIndexRoute: typeof InsightsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -212,8 +363,112 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quality': {
+      id: '/quality'
+      path: '/quality'
+      fullPath: '/quality'
+      preLoaderRoute: typeof QualityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/': {
+      id: '/industries/'
+      path: '/industries'
+      fullPath: '/industries/'
+      preLoaderRoute: typeof IndustriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/hotels': {
+      id: '/industries/hotels'
+      path: '/industries/hotels'
+      fullPath: '/industries/hotels'
+      preLoaderRoute: typeof IndustriesHotelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/restaurants': {
+      id: '/industries/restaurants'
+      path: '/industries/restaurants'
+      fullPath: '/industries/restaurants'
+      preLoaderRoute: typeof IndustriesRestaurantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/supermarkets': {
+      id: '/industries/supermarkets'
+      path: '/industries/supermarkets'
+      fullPath: '/industries/supermarkets'
+      preLoaderRoute: typeof IndustriesSupermarketsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/industries/wholesalers': {
+      id: '/industries/wholesalers'
+      path: '/industries/wholesalers'
+      fullPath: '/industries/wholesalers'
+      preLoaderRoute: typeof IndustriesWholesalersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insights/': {
+      id: '/insights/'
+      path: '/insights'
+      fullPath: '/insights/'
+      preLoaderRoute: typeof InsightsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/products/1l-palm-oil': {
+      id: '/products/1l-palm-oil'
+      path: '/1l-palm-oil'
+      fullPath: '/products/1l-palm-oil'
+      preLoaderRoute: typeof Products1lPalmOilRouteImport
+      parentRoute: typeof ProductsRoute
+    }
+    '/products/25l-palm-oil': {
+      id: '/products/25l-palm-oil'
+      path: '/25l-palm-oil'
+      fullPath: '/products/25l-palm-oil'
+      preLoaderRoute: typeof Products25lPalmOilRouteImport
+      parentRoute: typeof ProductsRoute
+    }
+    '/products/3l-palm-oil': {
+      id: '/products/3l-palm-oil'
+      path: '/3l-palm-oil'
+      fullPath: '/products/3l-palm-oil'
+      preLoaderRoute: typeof Products3lPalmOilRouteImport
+      parentRoute: typeof ProductsRoute
+    }
+    '/products/500ml-palm-oil': {
+      id: '/products/500ml-palm-oil'
+      path: '/500ml-palm-oil'
+      fullPath: '/products/500ml-palm-oil'
+      preLoaderRoute: typeof Products500mlPalmOilRouteImport
+      parentRoute: typeof ProductsRoute
+    }
+    '/products/5l-palm-oil': {
+      id: '/products/5l-palm-oil'
+      path: '/5l-palm-oil'
+      fullPath: '/products/5l-palm-oil'
+      preLoaderRoute: typeof Products5lPalmOilRouteImport
+      parentRoute: typeof ProductsRoute
+    }
   }
 }
+
+interface ProductsRouteChildren {
+  Products1lPalmOilRoute: typeof Products1lPalmOilRoute
+  Products25lPalmOilRoute: typeof Products25lPalmOilRoute
+  Products3lPalmOilRoute: typeof Products3lPalmOilRoute
+  Products500mlPalmOilRoute: typeof Products500mlPalmOilRoute
+  Products5lPalmOilRoute: typeof Products5lPalmOilRoute
+}
+
+const ProductsRouteChildren: ProductsRouteChildren = {
+  Products1lPalmOilRoute: Products1lPalmOilRoute,
+  Products25lPalmOilRoute: Products25lPalmOilRoute,
+  Products3lPalmOilRoute: Products3lPalmOilRoute,
+  Products500mlPalmOilRoute: Products500mlPalmOilRoute,
+  Products5lPalmOilRoute: Products5lPalmOilRoute,
+}
+
+const ProductsRouteWithChildren = ProductsRoute._addFileChildren(
+  ProductsRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -224,7 +479,14 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   DistributorsRoute: DistributorsRoute,
   LoginRoute: LoginRoute,
-  ProductsRoute: ProductsRoute,
+  ProductsRoute: ProductsRouteWithChildren,
+  QualityRoute: QualityRoute,
+  IndustriesHotelsRoute: IndustriesHotelsRoute,
+  IndustriesRestaurantsRoute: IndustriesRestaurantsRoute,
+  IndustriesSupermarketsRoute: IndustriesSupermarketsRoute,
+  IndustriesWholesalersRoute: IndustriesWholesalersRoute,
+  IndustriesIndexRoute: IndustriesIndexRoute,
+  InsightsIndexRoute: InsightsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
