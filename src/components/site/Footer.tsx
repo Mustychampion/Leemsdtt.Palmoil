@@ -47,6 +47,7 @@ export function Footer() {
             <li><Link to="/quality" className="hover:text-[var(--gold)]">Quality Standards</Link></li>
             <li><Link to="/industries" className="hover:text-[var(--gold)]">Industry Hub</Link></li>
             <li><Link to="/insights" className="hover:text-[var(--gold)]">Palm Oil Insights</Link></li>
+            <li><Link to="/blog" className="hover:text-[var(--gold)]">Blog & News</Link></li>
             <li><Link to="/about" className="hover:text-[var(--gold)]">About Us</Link></li>
             <li><Link to="/contact" className="hover:text-[var(--gold)]">Contact & Quotes</Link></li>
           </ul>

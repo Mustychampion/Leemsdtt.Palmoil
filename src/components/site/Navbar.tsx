@@ -11,6 +11,7 @@ const nav = [
   { label: "Distributors", to: "/distributors" },
   { label: "Quality", to: "/quality" },
   { label: "Industries", to: "/industries" },
+  { label: "Blog", to: "/blog" },
   { label: "About", to: "/about" },
   { label: "Contact", to: "/contact" },
 ];

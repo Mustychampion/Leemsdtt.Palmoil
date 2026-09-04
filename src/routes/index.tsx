@@ -8,6 +8,7 @@ import { Bulk } from "@/components/site/Bulk";
 import { Distributors } from "@/components/site/Distributors";
 import { Quality } from "@/components/site/Quality";
 import { Testimonials } from "@/components/site/Testimonials";
+import { Blog } from "@/components/site/Blog";
 import { Faq } from "@/components/site/Faq";
 import { Contact } from "@/components/site/Contact";
 import { Footer } from "@/components/site/Footer";
@@ -36,6 +37,7 @@ function Index() {
         <Distributors />
         <Quality />
         <Testimonials />
+        <Blog limit={3} />
         <Faq />
         <Contact />
       </main>

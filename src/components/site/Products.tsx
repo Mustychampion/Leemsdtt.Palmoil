@@ -5,7 +5,7 @@ import { ArrowRight, ExternalLink, Download, Tag } from "lucide-react";
 import { motion } from "framer-motion";
 import { PRODUCTS_DATA, MASTER_PRODUCT_ARTWORK } from "@/data/products";
 import { db } from "@/integrations/firebase/client";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { DEFAULT_PRODUCT_PRICES } from "@/components/admin/PriceManagement";
 
 const initialProducts = [
@@ -76,26 +76,24 @@ export function Products() {
   });
 
   useEffect(() => {
-    async function fetchPrices() {
-      try {
-        const snap = await getDoc(doc(db, "product_prices", "current_prices"));
-        if (snap.exists()) {
-          const items = snap.data().items;
-          if (items) {
-            setPrices({
-              "500ml": items["500ml"]?.formattedPrice || DEFAULT_PRODUCT_PRICES["500ml"].formattedPrice,
-              "1l": items["1l"]?.formattedPrice || DEFAULT_PRODUCT_PRICES["1l"].formattedPrice,
-              "3l": items["3l"]?.formattedPrice || DEFAULT_PRODUCT_PRICES["3l"].formattedPrice,
-              "5l": items["5l"]?.formattedPrice || DEFAULT_PRODUCT_PRICES["5l"].formattedPrice,
-              "25l": items["25l"]?.formattedPrice || DEFAULT_PRODUCT_PRICES["25l"].formattedPrice,
-            });
-          }
+    const ref = doc(db, "product_prices", "current_prices");
+    const unsubscribe = onSnapshot(ref, (snap) => {
+      if (snap.exists()) {
+        const items = snap.data().items;
+        if (items) {
+          setPrices({
+            "500ml": items["500ml"]?.formattedPrice || DEFAULT_PRODUCT_PRICES["500ml"].formattedPrice,
+            "1l": items["1l"]?.formattedPrice || DEFAULT_PRODUCT_PRICES["1l"].formattedPrice,
+            "3l": items["3l"]?.formattedPrice || DEFAULT_PRODUCT_PRICES["3l"].formattedPrice,
+            "5l": items["5l"]?.formattedPrice || DEFAULT_PRODUCT_PRICES["5l"].formattedPrice,
+            "25l": items["25l"]?.formattedPrice || DEFAULT_PRODUCT_PRICES["25l"].formattedPrice,
+          });
         }
-      } catch (e) {
-        // use fallback initial prices
       }
-    }
-    fetchPrices();
+    }, () => {
+      // silently use fallback on error
+    });
+    return () => unsubscribe();
   }, []);
 
   return (

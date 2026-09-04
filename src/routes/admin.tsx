@@ -7,9 +7,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SubmissionsTable } from "@/components/admin/SubmissionsTable";
 import { TeamManagement } from "@/components/admin/TeamManagement";
 import { PriceManagement } from "@/components/admin/PriceManagement";
+import { BlogManagement } from "@/components/admin/BlogManagement";
 import { Link } from "@tanstack/react-router";
-import { LogOut, ExternalLink, ShieldCheck, Mail, Users, Tag, Truck, MessageSquare } from "lucide-react";
+import { LogOut, ExternalLink, ShieldCheck, Mail, Users, Tag, Truck, MessageSquare, FileText } from "lucide-react";
 import { getSeoMeta } from "@/lib/seo";
+import { Toaster } from "@/components/ui/sonner";
 
 export const Route = createFileRoute("/admin")({
   head: () => getSeoMeta({
@@ -99,6 +101,9 @@ function AdminPage() {
             <TabsTrigger value="team" className="flex items-center gap-1.5 text-xs">
               <Users className="h-3.5 w-3.5" /> Team Staff
             </TabsTrigger>
+            <TabsTrigger value="blog" className="flex items-center gap-1.5 text-xs">
+              <FileText className="h-3.5 w-3.5" /> Blog Posts
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="inquiries" className="space-y-4">
@@ -120,8 +125,13 @@ function AdminPage() {
           <TabsContent value="team" className="space-y-4">
             <TeamManagement />
           </TabsContent>
+
+          <TabsContent value="blog" className="space-y-4">
+            <BlogManagement />
+          </TabsContent>
         </Tabs>
       </main>
+      <Toaster richColors position="top-right" />
     </div>
   );
 }
