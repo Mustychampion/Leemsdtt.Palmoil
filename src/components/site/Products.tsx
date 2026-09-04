@@ -122,6 +122,14 @@ export function Products() {
           </div>
         </div>
 
+        <div className="mb-12 rounded-2xl overflow-hidden border border-border shadow-sm">
+          <img 
+            src={MASTER_PRODUCT_ARTWORK.url} 
+            alt="LeemsDTT Official Product Artwork" 
+            className="w-full h-auto object-contain bg-muted/30"
+          />
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
           {initialProducts.map((p, i) => {
             const displayPrice = prices[p.key] || p.priceText;
