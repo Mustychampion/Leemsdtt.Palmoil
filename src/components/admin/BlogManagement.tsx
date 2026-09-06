@@ -12,6 +12,7 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { CORNERSTONE_ARTICLES } from "@/data/blogArticles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -48,6 +49,8 @@ import {
   Loader2,
   CalendarDays,
   User,
+  ExternalLink,
+  Search,
 } from "lucide-react";
 
 export interface BlogPost {
@@ -60,6 +63,10 @@ export interface BlogPost {
   content: string;
   coverImageUrl?: string;
   published: boolean;
+  seoTitle?: string;
+  metaDescription?: string;
+  primaryKeyword?: string;
+  tags?: string[];
   createdAt: any;
   updatedAt: any;
 }
@@ -75,6 +82,10 @@ const BLANK_FORM: FormState = {
   content: "",
   coverImageUrl: "",
   published: false,
+  seoTitle: "",
+  metaDescription: "",
+  primaryKeyword: "",
+  tags: [],
 };
 
 function slugify(str: string) {
@@ -108,11 +119,50 @@ export function BlogManagement() {
     const unsub = onSnapshot(
       q,
       (snap) => {
-        setPosts(snap.docs.map((d) => ({ id: d.id, ...d.data() } as BlogPost)));
+        const firestorePosts = snap.docs.map((d) => ({ id: d.id, ...d.data() } as BlogPost));
+        const firestoreSlugs = new Set(firestorePosts.map((p) => p.slug));
+        const builtIns = Object.values(CORNERSTONE_ARTICLES)
+          .filter((a) => !firestoreSlugs.has(a.slug))
+          .map((a) => ({
+            id: a.id,
+            title: a.title,
+            slug: a.slug,
+            category: a.category,
+            author: a.author,
+            excerpt: a.excerpt,
+            content: a.content,
+            coverImageUrl: a.coverImageUrl,
+            published: a.published,
+            seoTitle: a.seoTitle,
+            metaDescription: a.metaDescription,
+            primaryKeyword: a.primaryKeyword,
+            tags: a.tags,
+            createdAt: new Date(a.publishedAt),
+            updatedAt: new Date(a.updatedAt),
+          }));
+        setPosts([...firestorePosts, ...builtIns]);
         setLoading(false);
       },
       (err) => {
         console.error("Blog posts fetch error:", err);
+        const builtIns = Object.values(CORNERSTONE_ARTICLES).map((a) => ({
+          id: a.id,
+          title: a.title,
+          slug: a.slug,
+          category: a.category,
+          author: a.author,
+          excerpt: a.excerpt,
+          content: a.content,
+          coverImageUrl: a.coverImageUrl,
+          published: a.published,
+          seoTitle: a.seoTitle,
+          metaDescription: a.metaDescription,
+          primaryKeyword: a.primaryKeyword,
+          tags: a.tags,
+          createdAt: new Date(a.publishedAt),
+          updatedAt: new Date(a.updatedAt),
+        }));
+        setPosts(builtIns);
         setLoading(false);
       }
     );
@@ -128,14 +178,18 @@ export function BlogManagement() {
   const openEdit = (post: BlogPost) => {
     setEditingId(post.id);
     setForm({
-      title: post.title,
-      slug: post.slug,
-      category: post.category,
-      author: post.author,
-      excerpt: post.excerpt,
-      content: post.content,
+      title: post.title || "",
+      slug: post.slug || "",
+      category: post.category || "",
+      author: post.author || "",
+      excerpt: post.excerpt || "",
+      content: post.content || "",
       coverImageUrl: post.coverImageUrl || "",
-      published: post.published,
+      published: post.published ?? false,
+      seoTitle: post.seoTitle || "",
+      metaDescription: post.metaDescription || "",
+      primaryKeyword: post.primaryKeyword || "",
+      tags: post.tags || [],
     });
     setDialogOpen(true);
   };
@@ -189,9 +243,13 @@ export function BlogManagement() {
       const payload = {
         ...form,
         slug: form.slug || slugify(form.title),
+        seoTitle: form.seoTitle?.trim() || form.title.trim(),
+        metaDescription: form.metaDescription?.trim() || form.excerpt.trim(),
+        primaryKeyword: form.primaryKeyword?.trim() || "",
+        tags: Array.isArray(form.tags) ? form.tags : [],
         updatedAt: serverTimestamp(),
       };
-      if (editingId) {
+      if (editingId && !editingId.startsWith("art-")) {
         await updateDoc(doc(db, "blog_posts", editingId), payload);
         toast.success("Article updated successfully!");
       } else {
@@ -199,7 +257,7 @@ export function BlogManagement() {
           ...payload,
           createdAt: serverTimestamp(),
         });
-        toast.success("Article published successfully!");
+        toast.success("Article saved to database successfully!");
       }
       setDialogOpen(false);
     } catch (err: any) {
@@ -314,6 +372,19 @@ export function BlogManagement() {
 
                   {/* Actions */}
                   <div className="flex items-center gap-1.5 shrink-0">
+                    {post.published && (
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-8 w-8 text-primary hover:text-primary/80"
+                        title="View Live Article"
+                        asChild
+                      >
+                        <a href={`/blog/${post.slug}`} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      </Button>
+                    )}
                     <Button
                       size="icon"
                       variant="ghost"
@@ -478,6 +549,95 @@ export function BlogManagement() {
                 rows={12}
                 className="font-mono text-xs leading-relaxed"
               />
+            </div>
+
+            {/* Automatic SEO & Google Search Snippet Simulation */}
+            <div className="rounded-xl border border-primary/25 bg-primary/[0.03] p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-primary font-semibold text-xs tracking-wide uppercase">
+                  <Search className="h-4 w-4" /> Live Google Search & SEO Preview
+                </div>
+                <Badge variant="outline" className="text-[10px] text-primary border-primary/30">
+                  Auto-synced
+                </Badge>
+              </div>
+
+              {/* Simulation card */}
+              <div className="p-3.5 rounded-lg border border-border/80 bg-background/90 text-left space-y-1 shadow-xs">
+                <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground truncate font-sans">
+                  <span className="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center text-[9px] font-bold text-primary">L</span>
+                  <span>https://www.leemsdtt.name.ng</span>
+                  <span>›</span>
+                  <span className="text-foreground/80">blog</span>
+                  <span>›</span>
+                  <span className="text-primary font-mono text-[10px] truncate">{form.slug || slugify(form.title) || "slug-here"}</span>
+                </div>
+                <h4 className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline cursor-pointer line-clamp-1">
+                  {form.seoTitle || form.title || "Your Article Title Will Appear Here in Search"} — LeemsDTT Nigeria
+                </h4>
+                <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                  {form.metaDescription || form.excerpt || "Your compelling meta description or excerpt will appear here in Google and social sharing previews (aim for 140–160 characters)."}
+                </p>
+              </div>
+
+              {/* Explicit SEO override fields */}
+              <div className="space-y-3 pt-1">
+                <div className="space-y-1">
+                  <div className="flex justify-between items-center text-xs">
+                    <Label htmlFor="blog-seo-title" className="text-[11px] font-medium">Custom SEO Title <span className="text-muted-foreground font-normal">(optional override)</span></Label>
+                    <span className={`text-[10px] ${(form.seoTitle || form.title).length > 60 ? "text-amber-500 font-semibold" : "text-muted-foreground"}`}>
+                      {(form.seoTitle || form.title).length}/60 chars
+                    </span>
+                  </div>
+                  <Input
+                    id="blog-seo-title"
+                    placeholder={form.title || "Enter custom SEO title (defaults to article title)"}
+                    value={form.seoTitle || ""}
+                    onChange={(e) => setForm((p) => ({ ...p, seoTitle: e.target.value }))}
+                    className="text-xs"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between items-center text-xs">
+                    <Label htmlFor="blog-seo-desc" className="text-[11px] font-medium">Custom Meta Description <span className="text-muted-foreground font-normal">(optional override)</span></Label>
+                    <span className={`text-[10px] ${(form.metaDescription || form.excerpt).length > 160 ? "text-amber-500 font-semibold" : "text-muted-foreground"}`}>
+                      {(form.metaDescription || form.excerpt).length}/160 chars
+                    </span>
+                  </div>
+                  <Textarea
+                    id="blog-seo-desc"
+                    placeholder={form.excerpt || "Enter custom meta description (defaults to excerpt)"}
+                    value={form.metaDescription || ""}
+                    onChange={(e) => setForm((p) => ({ ...p, metaDescription: e.target.value }))}
+                    rows={2}
+                    className="text-xs"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <Label htmlFor="blog-keyword" className="text-[11px] font-medium">Primary Focus Keyword</Label>
+                    <Input
+                      id="blog-keyword"
+                      placeholder="e.g. digital transformation for Nigerian businesses"
+                      value={form.primaryKeyword || ""}
+                      onChange={(e) => setForm((p) => ({ ...p, primaryKeyword: e.target.value }))}
+                      className="text-xs"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="blog-tags" className="text-[11px] font-medium">Tags <span className="text-muted-foreground font-normal">(comma-separated)</span></Label>
+                    <Input
+                      id="blog-tags"
+                      placeholder="e.g. Digital Transformation, SMEs, Technology"
+                      value={Array.isArray(form.tags) ? form.tags.join(", ") : (form.tags || "")}
+                      onChange={(e) => setForm((p) => ({ ...p, tags: e.target.value.split(",").map((t) => t.trim()).filter(Boolean) }))}
+                      className="text-xs"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Publish toggle */}

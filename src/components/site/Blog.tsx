@@ -13,6 +13,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
+import { CORNERSTONE_ARTICLES } from "@/data/blogArticles";
 
 export interface BlogPost {
   id: string;
@@ -53,7 +54,7 @@ function BlogCard({ post }: { post: BlogPost }) {
     >
       {/* Cover Image */}
       {post.coverImageUrl && (
-        <div className="relative overflow-hidden h-52">
+        <Link to={`/blog/${post.slug}`} className="relative overflow-hidden h-52 block group">
           <img
             src={post.coverImageUrl}
             alt={post.title}
@@ -61,7 +62,7 @@ function BlogCard({ post }: { post: BlogPost }) {
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
-        </div>
+        </Link>
       )}
 
       <div className="p-6 flex flex-col flex-1">
@@ -79,8 +80,8 @@ function BlogCard({ post }: { post: BlogPost }) {
         </div>
 
         {/* Title */}
-        <h2 className="font-display text-xl font-semibold text-foreground mb-2 leading-snug">
-          {post.title}
+        <h2 className="font-display text-xl font-semibold text-foreground mb-2 leading-snug hover:text-primary transition-colors">
+          <Link to={`/blog/${post.slug}`}>{post.title}</Link>
         </h2>
 
         {/* Excerpt highlight */}
@@ -100,24 +101,37 @@ function BlogCard({ post }: { post: BlogPost }) {
           )}
         </div>
 
-        {/* Read More / Collapse button */}
-        <Button
-          variant={expanded ? "ghost" : "outline"}
-          size="sm"
-          className="w-full text-xs font-semibold gap-1.5 border-primary/30 hover:border-primary/60 hover:text-primary transition-colors"
-          onClick={() => setExpanded((v) => !v)}
-          aria-expanded={expanded}
-        >
-          {expanded ? (
-            <>
-              <ChevronUp className="h-3.5 w-3.5" /> Show Less
-            </>
-          ) : (
-            <>
-              Read More <ChevronDown className="h-3.5 w-3.5" />
-            </>
-          )}
-        </Button>
+        {/* Action Buttons: Full Article Link & Quick Preview */}
+        <div className="grid grid-cols-2 gap-2 mt-auto pt-2">
+          <Button
+            asChild
+            variant="gold"
+            size="sm"
+            className="text-xs font-semibold gap-1.5"
+          >
+            <Link to={`/blog/${post.slug}`}>
+              Read Article <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </Button>
+
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-xs font-semibold gap-1 border-border hover:bg-secondary/40"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+          >
+            {expanded ? (
+              <>
+                <ChevronUp className="h-3.5 w-3.5" /> Close
+              </>
+            ) : (
+              <>
+                Quick View <ChevronDown className="h-3.5 w-3.5" />
+              </>
+            )}
+          </Button>
+        </div>
 
         {/* Expandable full content */}
         <AnimatePresence initial={false}>
@@ -163,11 +177,44 @@ export function Blog({ limit, showHeading = true }: BlogProps) {
     const unsub = onSnapshot(
       q,
       (snap) => {
-        const all = snap.docs.map((d) => ({ id: d.id, ...d.data() } as BlogPost));
-        setPosts(limit ? all.slice(0, limit) : all);
+        const firestorePosts = snap.docs.map((d) => ({ id: d.id, ...d.data() } as BlogPost));
+        const firestoreSlugs = new Set(firestorePosts.map((p) => p.slug));
+        const builtInPosts = Object.values(CORNERSTONE_ARTICLES)
+          .filter((a) => !firestoreSlugs.has(a.slug))
+          .map((a) => ({
+            id: a.id,
+            title: a.title,
+            slug: a.slug,
+            category: a.category,
+            author: a.author,
+            excerpt: a.excerpt,
+            content: a.content,
+            coverImageUrl: a.coverImageUrl,
+            published: a.published,
+            createdAt: new Date(a.publishedAt),
+            updatedAt: new Date(a.updatedAt),
+          }));
+        const combined = [...firestorePosts, ...builtInPosts];
+        setPosts(limit ? combined.slice(0, limit) : combined);
         setLoading(false);
       },
-      () => setLoading(false)
+      () => {
+        const builtInPosts = Object.values(CORNERSTONE_ARTICLES).map((a) => ({
+          id: a.id,
+          title: a.title,
+          slug: a.slug,
+          category: a.category,
+          author: a.author,
+          excerpt: a.excerpt,
+          content: a.content,
+          coverImageUrl: a.coverImageUrl,
+          published: a.published,
+          createdAt: new Date(a.publishedAt),
+          updatedAt: new Date(a.updatedAt),
+        }));
+        setPosts(limit ? builtInPosts.slice(0, limit) : builtInPosts);
+        setLoading(false);
+      }
     );
     return () => unsub();
   }, [limit]);

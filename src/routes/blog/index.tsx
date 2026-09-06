@@ -6,12 +6,12 @@ import { Toaster } from "@/components/ui/sonner";
 import { getSeoMeta, getBreadcrumbSchema } from "@/lib/seo";
 import { BookOpen } from "lucide-react";
 
-export const Route = createFileRoute("/blog")({
+export const Route = createFileRoute("/blog/")({
   head: () => {
     const seo = getSeoMeta({
-      title: "Blog — Palm Oil Insights & News | LeemsDTT Nigeria",
+      title: "Blog & Insights — Technology, Data & Value Chains | LeemsDTT Nigeria",
       description:
-        "Read the latest articles, industry insights, quality tips and sourcing guides from the LeemsDTT palm oil team in Nigeria.",
+        "Practical digital transformation roadmaps, SME technology guides, operational insights, and commercial sourcing knowledge from LeemsDTT — ValorTrust Integrated Services Ltd.",
       path: "/blog",
       type: "website",
     });
@@ -28,10 +28,10 @@ export const Route = createFileRoute("/blog")({
       ],
     };
   },
-  component: BlogPage,
+  component: BlogIndexPage,
 });
 
-function BlogPage() {
+function BlogIndexPage() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -41,18 +41,18 @@ function BlogPage() {
         <section className="py-16 bg-gradient-hero text-white text-center">
           <div className="container mx-auto px-6 max-w-4xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/20 bg-white/5 text-xs font-semibold uppercase tracking-wider text-white/90">
-              <BookOpen className="h-4 w-4 text-[var(--gold)]" /> LeemsDTT Blog
+              <BookOpen className="h-4 w-4 text-[var(--gold)]" /> LeemsDTT Insights &amp; Knowledge Hub
             </div>
             <h1 className="font-display text-4xl md:text-5xl font-bold leading-tight">
-              Palm Oil Insights &amp; News
+              Business Technology &amp; Market Insights
             </h1>
             <p className="text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
-              Tips, industry updates, sourcing guides and quality knowledge from the LeemsDTT team — helping you buy smarter.
+              Educational roadmaps, practical digital capability frameworks, and commercial insights from LeemsDTT — empowering Nigerian enterprises to build measurable value.
             </p>
           </div>
         </section>
 
-        {/* All posts — full listing with heading hidden (hero above acts as heading) */}
+        {/* All posts listing */}
         <Blog showHeading={false} />
       </main>
 

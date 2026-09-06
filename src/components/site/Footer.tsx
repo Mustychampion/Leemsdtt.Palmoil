@@ -58,11 +58,22 @@ export function Footer() {
           <ul className="space-y-2.5 text-sm">
             <li className="flex items-center gap-2">
               <Phone className="h-3.5 w-3.5 text-[var(--gold)] shrink-0" />
-              <a href="tel:+2348039535043" className="hover:text-[var(--gold)]">+234 803 953 5043</a>
+              <a href="tel:+2348039535043" className="hover:text-[var(--gold)]">+234 803 953 5043 (08039535043)</a>
             </li>
             <li className="flex items-center gap-2">
               <Phone className="h-3.5 w-3.5 text-[var(--gold)] shrink-0" />
               <a href="tel:+2347034372698" className="hover:text-[var(--gold)]">+234 703 437 2698</a>
+            </li>
+            <li className="flex items-center gap-2">
+              <a
+                href="https://wa.me/2348039535043"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[var(--gold)] inline-flex items-center gap-2 text-emerald-400 font-medium"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                WhatsApp: 0803 953 5043
+              </a>
             </li>
             <li className="flex items-center gap-2">
               <Mail className="h-3.5 w-3.5 text-[var(--gold)] shrink-0" />
@@ -71,12 +82,18 @@ export function Footer() {
             <li className="text-xs text-white/60 pt-1">
               Mon – Sat: 8:00 AM – 6:00 PM WAT
             </li>
-            <li className="pt-2 flex flex-col gap-1.5 text-xs">
-              <a href="https://www.valortrustgroupco.name.ng" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--gold)] inline-flex items-center gap-1.5">
-                <Globe className="h-3.5 w-3.5" /> www.valortrustgroupco.name.ng
+            <li className="pt-2 flex flex-col gap-2 text-xs">
+              <a href="https://x.com/Leemsdtt" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--gold)] inline-flex items-center gap-2">
+                <svg className="h-3.5 w-3.5 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                <span>Follow @Leemsdtt on X</span>
               </a>
-              <a href="https://instagram.com/leemsdtt" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--gold)] inline-flex items-center gap-1.5">
-                <Instagram className="h-3.5 w-3.5" /> @leemsdtt
+              <a href="https://instagram.com/leemsdtt" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--gold)] inline-flex items-center gap-2">
+                <Instagram className="h-3.5 w-3.5 shrink-0" /> @leemsdtt on Instagram
+              </a>
+              <a href="https://www.valortrustgroupco.name.ng" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--gold)] inline-flex items-center gap-2">
+                <Globe className="h-3.5 w-3.5 shrink-0" /> www.valortrustgroupco.name.ng
               </a>
             </li>
           </ul>

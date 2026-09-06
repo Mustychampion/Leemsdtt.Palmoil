@@ -99,24 +99,51 @@ export function Contact() {
               </div>
               <div>
                 <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Direct Phone</div>
-                <div className="text-foreground font-medium mt-0.5">+234 803 953 5043</div>
-                <div className="text-foreground font-medium">+234 703 437 2698</div>
+                <div className="text-foreground font-medium mt-0.5">
+                  <a href="tel:+2348039535043" className="hover:text-primary transition-colors">
+                    +234 803 953 5043 (08039535043)
+                  </a>
+                </div>
+                <div className="text-foreground font-medium">
+                  <a href="tel:+2347034372698" className="hover:text-primary transition-colors">
+                    +234 703 437 2698
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="h-10 w-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 shrink-0">
+                <MessageSquare className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">WhatsApp Direct</div>
+                <a
+                  href="https://wa.me/2348039535043"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-600 dark:text-emerald-400 hover:underline font-medium mt-0.5 inline-block"
+                >
+                  Chat on WhatsApp (0803 953 5043 / +234 803 953 5043)
+                </a>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
               <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                <MessageSquare className="h-5 w-5" />
+                <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
               </div>
               <div>
-                <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">WhatsApp</div>
+                <div className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Official X (Twitter)</div>
                 <a
-                  href="https://wa.me/2348039535043"
+                  href="https://x.com/Leemsdtt"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary hover:underline font-medium mt-0.5 inline-block"
                 >
-                  Chat with Sales (+234 803 953 5043)
+                  @Leemsdtt (https://x.com/Leemsdtt)
                 </a>
               </div>
             </div>

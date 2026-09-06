@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
-import { Route as BlogRouteImport } from './routes/blog'
 import { Route as BootstrapRouteImport } from './routes/bootstrap'
 import { Route as BulkSupplyRouteImport } from './routes/bulk-supply'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -20,6 +19,8 @@ import { Route as DistributorsRouteImport } from './routes/distributors'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProductsRouteImport } from './routes/products'
 import { Route as QualityRouteImport } from './routes/quality'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as IndustriesIndexRouteImport } from './routes/industries/index'
 import { Route as IndustriesHotelsRouteImport } from './routes/industries/hotels'
 import { Route as IndustriesRestaurantsRouteImport } from './routes/industries/restaurants'
@@ -45,11 +46,6 @@ const AboutRoute = AboutRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BootstrapRoute = BootstrapRouteImport.update({
@@ -85,6 +81,16 @@ const ProductsRoute = ProductsRouteImport.update({
 const QualityRoute = QualityRouteImport.update({
   id: '/quality',
   path: '/quality',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndustriesIndexRoute = IndustriesIndexRouteImport.update({
@@ -147,7 +153,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/blog': typeof BlogRoute
   '/bootstrap': typeof BootstrapRoute
   '/bulk-supply': typeof BulkSupplyRoute
   '/contact': typeof ContactRoute
@@ -155,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
   '/quality': typeof QualityRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/industries/hotels': typeof IndustriesHotelsRoute
   '/industries/restaurants': typeof IndustriesRestaurantsRoute
   '/industries/supermarkets': typeof IndustriesSupermarketsRoute
@@ -164,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/products/3l-palm-oil': typeof Products3lPalmOilRoute
   '/products/500ml-palm-oil': typeof Products500mlPalmOilRoute
   '/products/5l-palm-oil': typeof Products5lPalmOilRoute
+  '/blog/': typeof BlogIndexRoute
   '/industries/': typeof IndustriesIndexRoute
   '/insights/': typeof InsightsIndexRoute
 }
@@ -171,7 +178,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/blog': typeof BlogRoute
   '/bootstrap': typeof BootstrapRoute
   '/bulk-supply': typeof BulkSupplyRoute
   '/contact': typeof ContactRoute
@@ -179,6 +185,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
   '/quality': typeof QualityRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/industries/hotels': typeof IndustriesHotelsRoute
   '/industries/restaurants': typeof IndustriesRestaurantsRoute
   '/industries/supermarkets': typeof IndustriesSupermarketsRoute
@@ -188,6 +195,7 @@ export interface FileRoutesByTo {
   '/products/3l-palm-oil': typeof Products3lPalmOilRoute
   '/products/500ml-palm-oil': typeof Products500mlPalmOilRoute
   '/products/5l-palm-oil': typeof Products5lPalmOilRoute
+  '/blog': typeof BlogIndexRoute
   '/industries': typeof IndustriesIndexRoute
   '/insights': typeof InsightsIndexRoute
 }
@@ -196,7 +204,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/blog': typeof BlogRoute
   '/bootstrap': typeof BootstrapRoute
   '/bulk-supply': typeof BulkSupplyRoute
   '/contact': typeof ContactRoute
@@ -204,6 +211,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/products': typeof ProductsRouteWithChildren
   '/quality': typeof QualityRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/industries/hotels': typeof IndustriesHotelsRoute
   '/industries/restaurants': typeof IndustriesRestaurantsRoute
   '/industries/supermarkets': typeof IndustriesSupermarketsRoute
@@ -213,6 +221,7 @@ export interface FileRoutesById {
   '/products/3l-palm-oil': typeof Products3lPalmOilRoute
   '/products/500ml-palm-oil': typeof Products500mlPalmOilRoute
   '/products/5l-palm-oil': typeof Products5lPalmOilRoute
+  '/blog/': typeof BlogIndexRoute
   '/industries/': typeof IndustriesIndexRoute
   '/insights/': typeof InsightsIndexRoute
 }
@@ -222,7 +231,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
-    | '/blog'
     | '/bootstrap'
     | '/bulk-supply'
     | '/contact'
@@ -230,6 +238,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/products'
     | '/quality'
+    | '/blog/$slug'
     | '/industries/hotels'
     | '/industries/restaurants'
     | '/industries/supermarkets'
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/products/3l-palm-oil'
     | '/products/500ml-palm-oil'
     | '/products/5l-palm-oil'
+    | '/blog/'
     | '/industries/'
     | '/insights/'
   fileRoutesByTo: FileRoutesByTo
@@ -246,7 +256,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
-    | '/blog'
     | '/bootstrap'
     | '/bulk-supply'
     | '/contact'
@@ -254,6 +263,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/products'
     | '/quality'
+    | '/blog/$slug'
     | '/industries/hotels'
     | '/industries/restaurants'
     | '/industries/supermarkets'
@@ -263,6 +273,7 @@ export interface FileRouteTypes {
     | '/products/3l-palm-oil'
     | '/products/500ml-palm-oil'
     | '/products/5l-palm-oil'
+    | '/blog'
     | '/industries'
     | '/insights'
   id:
@@ -270,7 +281,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
-    | '/blog'
     | '/bootstrap'
     | '/bulk-supply'
     | '/contact'
@@ -278,6 +288,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/products'
     | '/quality'
+    | '/blog/$slug'
     | '/industries/hotels'
     | '/industries/restaurants'
     | '/industries/supermarkets'
@@ -287,6 +298,7 @@ export interface FileRouteTypes {
     | '/products/3l-palm-oil'
     | '/products/500ml-palm-oil'
     | '/products/5l-palm-oil'
+    | '/blog/'
     | '/industries/'
     | '/insights/'
   fileRoutesById: FileRoutesById
@@ -295,7 +307,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
-  BlogRoute: typeof BlogRoute
   BootstrapRoute: typeof BootstrapRoute
   BulkSupplyRoute: typeof BulkSupplyRoute
   ContactRoute: typeof ContactRoute
@@ -303,10 +314,12 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   ProductsRoute: typeof ProductsRouteWithChildren
   QualityRoute: typeof QualityRoute
+  BlogSlugRoute: typeof BlogSlugRoute
   IndustriesHotelsRoute: typeof IndustriesHotelsRoute
   IndustriesRestaurantsRoute: typeof IndustriesRestaurantsRoute
   IndustriesSupermarketsRoute: typeof IndustriesSupermarketsRoute
   IndustriesWholesalersRoute: typeof IndustriesWholesalersRoute
+  BlogIndexRoute: typeof BlogIndexRoute
   IndustriesIndexRoute: typeof IndustriesIndexRoute
   InsightsIndexRoute: typeof InsightsIndexRoute
 }
@@ -332,13 +345,6 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bootstrap': {
@@ -388,6 +394,20 @@ declare module '@tanstack/react-router' {
       path: '/quality'
       fullPath: '/quality'
       preLoaderRoute: typeof QualityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/industries/': {
@@ -494,7 +514,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
-  BlogRoute: BlogRoute,
   BootstrapRoute: BootstrapRoute,
   BulkSupplyRoute: BulkSupplyRoute,
   ContactRoute: ContactRoute,
@@ -502,10 +521,12 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   ProductsRoute: ProductsRouteWithChildren,
   QualityRoute: QualityRoute,
+  BlogSlugRoute: BlogSlugRoute,
   IndustriesHotelsRoute: IndustriesHotelsRoute,
   IndustriesRestaurantsRoute: IndustriesRestaurantsRoute,
   IndustriesSupermarketsRoute: IndustriesSupermarketsRoute,
   IndustriesWholesalersRoute: IndustriesWholesalersRoute,
+  BlogIndexRoute: BlogIndexRoute,
   IndustriesIndexRoute: IndustriesIndexRoute,
   InsightsIndexRoute: InsightsIndexRoute,
 }

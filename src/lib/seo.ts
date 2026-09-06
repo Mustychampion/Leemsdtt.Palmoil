@@ -38,6 +38,8 @@ export function getSeoMeta({
   image = "/images/LEEMSDTT master.png",
   type = "website",
   noIndex = false,
+  publishedTime,
+  modifiedTime,
 }: SeoMetaProps) {
   const canonical = buildCanonicalUrl(path);
   const fullImageUrl = image.startsWith("http") ? image : `${getSiteUrl()}${image.startsWith("/") ? image : `/${image}`}`;
@@ -53,15 +55,27 @@ export function getSeoMeta({
     { property: "og:type", content: type },
     { property: "og:url", content: canonical },
     { property: "og:image", content: fullImageUrl },
-    { property: "og:site_name", content: "LeemsDTT Palm Oil" },
+    { property: "og:site_name", content: "LeemsDTT Palm Oil & Digital Capabilities" },
     { property: "og:locale", content: "en_NG" },
 
-    // Twitter Cards
+    // Twitter / X Cards
     { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: "@Leemsdtt" },
+    { name: "twitter:creator", content: "@Leemsdtt" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: fullImageUrl },
   ];
+
+  if (type === "article") {
+    if (publishedTime) {
+      metaTags.push({ property: "article:published_time", content: publishedTime });
+    }
+    if (modifiedTime) {
+      metaTags.push({ property: "article:modified_time", content: modifiedTime });
+    }
+    metaTags.push({ property: "article:publisher", content: "https://www.valortrustgroupco.name.ng" });
+  }
 
   if (noIndex) {
     metaTags.push({ name: "robots", content: "noindex, nofollow" });
@@ -77,6 +91,69 @@ export function getSeoMeta({
     links: [
       { rel: "canonical", href: canonical },
     ],
+  };
+}
+
+export interface BlogPostingSchemaProps {
+  title: string;
+  description: string;
+  slug: string;
+  image?: string;
+  datePublished?: string;
+  dateModified?: string;
+  author?: string;
+  category?: string;
+  keywords?: string[];
+}
+
+/**
+ * Article & BlogPosting Schema.org Generator
+ */
+export function getBlogPostingSchema({
+  title,
+  description,
+  slug,
+  image = "/images/digital-transformation-nigerian-businesses.jpg",
+  datePublished,
+  dateModified,
+  author = "LEEMS DTT",
+  category,
+  keywords = [],
+}: BlogPostingSchemaProps) {
+  const siteUrl = getSiteUrl();
+  const cleanSlug = (slug || "").replace(/^\/+/, "");
+  const articleUrl = cleanSlug ? `${siteUrl}/blog/${cleanSlug}` : siteUrl;
+  const fullImageUrl = image.startsWith("http") ? image : `${siteUrl}${image.startsWith("/") ? image : `/${image}`}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${articleUrl}/#article`,
+    isPartOf: {
+      "@type": "WebPage",
+      "@id": articleUrl,
+    },
+    headline: title,
+    description,
+    url: articleUrl,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": articleUrl,
+    },
+    image: [fullImageUrl],
+    datePublished: datePublished || new Date().toISOString(),
+    dateModified: dateModified || datePublished || new Date().toISOString(),
+    author: {
+      "@type": "Organization",
+      name: author || "LEEMS DTT",
+      url: siteUrl,
+    },
+    publisher: {
+      "@id": `${siteUrl}/#organization`,
+    },
+    inLanguage: "en-NG",
+    articleSection: category || "Digital Transformation",
+    keywords: Array.isArray(keywords) ? keywords.join(", ") : keywords,
   };
 }
 
@@ -129,6 +206,7 @@ export function getOrganizationSchema() {
       },
     ],
     sameAs: [
+      "https://x.com/Leemsdtt",
       "https://instagram.com/leemsdtt",
       "https://tiktok.com/leemsdtt",
       "https://www.valortrustgroupco.name.ng",
