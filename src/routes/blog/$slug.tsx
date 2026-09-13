@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { getSeoMeta, getBreadcrumbSchema, getBlogPostingSchema } from "@/lib/seo";
 import { CORNERSTONE_ARTICLES, type BlogArticleData } from "@/data/blogArticles";
+import { NewsletterSubscribe } from "@/components/site/NewsletterSubscribe";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: ({ params }) => {
@@ -440,6 +441,11 @@ function BlogPostView() {
               </div>
             </div>
           </section>
+
+          {/* Newsletter Subscribe Section */}
+          <div className="mt-14">
+            <NewsletterSubscribe variant="card" source={`Blog Article: ${article.title || slug}`} />
+          </div>
 
           {/* Back to Blog */}
           <div className="mt-12 text-center">

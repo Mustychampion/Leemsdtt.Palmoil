@@ -15,9 +15,9 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 
-export type TableName = "inquiries" | "distributor_applications" | "bulk_quotes";
+export type TableName = "inquiries" | "distributor_applications" | "bulk_quotes" | "subscribers";
 
-const STATUS_OPTIONS = ["new", "contacted", "qualified", "won", "lost", "archived"];
+const STATUS_OPTIONS = ["new", "contacted", "qualified", "won", "lost", "archived", "active", "unsubscribed"];
 
 const DEFAULT_COLUMNS: Record<TableName, { key: string; label: string }[]> = {
   inquiries: [
@@ -40,6 +40,12 @@ const DEFAULT_COLUMNS: Record<TableName, { key: string; label: string }[]> = {
     { key: "email", label: "Email" },
     { key: "phone", label: "Phone" },
     { key: "requested_volume", label: "Volume" },
+  ],
+  subscribers: [
+    { key: "email", label: "Email" },
+    { key: "phone", label: "Phone" },
+    { key: "interest", label: "Interest Area" },
+    { key: "source", label: "Subscribed From" },
   ],
 };
 

@@ -1,10 +1,30 @@
 import logo from "@/assets/leemsdtt-logo.png";
 import { Link } from "@tanstack/react-router";
-import { Instagram, Globe, TicketCheckIcon, Mail, Phone, MapPin } from "lucide-react";
+import { Instagram, Globe, Mail, Phone, MapPin, Sparkles } from "lucide-react";
+import { NewsletterSubscribe } from "@/components/site/NewsletterSubscribe";
 
 export function Footer() {
   return (
     <footer className="bg-primary-deep text-white/80">
+      {/* Pre-Footer Newsletter Subscription Section */}
+      <div className="border-b border-white/10 bg-black/20">
+        <div className="container mx-auto px-6 py-12 flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="max-w-xl">
+            <div className="flex items-center gap-2 text-[var(--gold)] text-xs uppercase tracking-widest font-semibold mb-2">
+              <Sparkles className="h-4 w-4" /> Direct Supplier Updates
+            </div>
+            <h3 className="font-display text-2xl sm:text-3xl text-white font-bold mb-2">
+              Never Miss Palm Oil Supply Schedules &amp; Price Alerts
+            </h3>
+            <p className="text-white/70 text-sm leading-relaxed">
+              Join hundreds of Nigerian retailers, caterers, hotels, and distributors receiving direct stock notifications and market updates.
+            </p>
+          </div>
+          <div className="w-full lg:max-w-md">
+            <NewsletterSubscribe variant="footer" source="Website Global Footer" />
+          </div>
+        </div>
+      </div>
       <div className="container mx-auto px-6 py-16 grid md:grid-cols-5 gap-10">
         <div className="md:col-span-2">
           <div className="flex items-center gap-3 mb-5">

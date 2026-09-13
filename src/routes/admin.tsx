@@ -95,11 +95,14 @@ function AdminPage() {
             <TabsTrigger value="quotes" className="flex items-center gap-1.5 text-xs">
               <Mail className="h-3.5 w-3.5" /> Bulk Quotes
             </TabsTrigger>
+            <TabsTrigger value="subscribers" className="flex items-center gap-1.5 text-xs">
+              <Users className="h-3.5 w-3.5" /> Subscribers
+            </TabsTrigger>
             <TabsTrigger value="prices" className="flex items-center gap-1.5 text-xs">
               <Tag className="h-3.5 w-3.5" /> Product Prices
             </TabsTrigger>
             <TabsTrigger value="team" className="flex items-center gap-1.5 text-xs">
-              <Users className="h-3.5 w-3.5" /> Team Staff
+              <ShieldCheck className="h-3.5 w-3.5" /> Team Staff
             </TabsTrigger>
             <TabsTrigger value="blog" className="flex items-center gap-1.5 text-xs">
               <FileText className="h-3.5 w-3.5" /> Blog Posts
@@ -116,6 +119,10 @@ function AdminPage() {
 
           <TabsContent value="quotes" className="space-y-4">
             <SubmissionsTable table="bulk_quotes" canEdit={true} canDelete={true} />
+          </TabsContent>
+
+          <TabsContent value="subscribers" className="space-y-4">
+            <SubmissionsTable table="subscribers" canEdit={true} canDelete={true} />
           </TabsContent>
 
           <TabsContent value="prices" className="space-y-4">

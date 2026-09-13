@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { Blog } from "@/components/site/Blog";
+import { NewsletterSubscribe } from "@/components/site/NewsletterSubscribe";
 import { Toaster } from "@/components/ui/sonner";
 import { getSeoMeta, getBreadcrumbSchema } from "@/lib/seo";
 import { BookOpen } from "lucide-react";
@@ -54,6 +55,11 @@ function BlogIndexPage() {
 
         {/* All posts listing */}
         <Blog showHeading={false} />
+
+        {/* Newsletter Subscription Card */}
+        <div className="container mx-auto px-6 py-12 max-w-4xl">
+          <NewsletterSubscribe variant="card" source="Blog Index Page" />
+        </div>
       </main>
 
       <Footer />
@@ -61,3 +67,4 @@ function BlogIndexPage() {
     </div>
   );
 }
+

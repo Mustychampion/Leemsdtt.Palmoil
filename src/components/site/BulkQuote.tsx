@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { db } from "@/integrations/firebase/client";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { sendEmailNotification } from "@/lib/email";
+import { sendEmailNotification, sendNotificationAlert } from "@/lib/email";
 
 const schema = z.object({
   full_name: z.string().trim().min(1).max(120),
@@ -48,8 +48,8 @@ export function BulkQuote() {
       error = e;
     }
 
-    // Direct email dispatch to leemsdtt.valortrust@gmail.com
-    await sendEmailNotification({
+    // Direct multi-channel notification dispatch
+    await sendNotificationAlert({
       formType: "Bulk Quote Request",
       fullName: parsed.data.full_name,
       companyName: parsed.data.business_name,
@@ -60,13 +60,16 @@ export function BulkQuote() {
       volume: parsed.data.monthly_volume,
       location: parsed.data.delivery_location,
       message: parsed.data.notes,
+      source: "Bulk Supply Page",
     });
 
     setLoading(false);
     if (error) {
-      toast.error("Couldn't save to database, but email notification was sent", { description: error.message });
+      toast.error("Couldn't save to database, but alert was dispatched", { description: error.message });
     }
-    toast.success("Quote request received", { description: "Direct email notification dispatched to leemsdtt.valortrust@gmail.com and our sales team will contact you within 4 hours." });
+    toast.success("Quote request received", {
+      description: "Direct notification dispatched to our team. An account officer will reach out promptly.",
+    });
     form.reset();
   };
 

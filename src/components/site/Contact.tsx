@@ -7,7 +7,7 @@ import { Phone, Mail, Clock, MessageSquare, MapPin } from "lucide-react";
 import { toast } from "sonner";
 import { db } from "@/integrations/firebase/client";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { sendEmailNotification } from "@/lib/email";
+import { sendEmailNotification, sendNotificationAlert } from "@/lib/email";
 
 export function Contact() {
   const [loading, setLoading] = useState(false);
@@ -54,8 +54,8 @@ export function Contact() {
       error = err;
     }
 
-    // 2. Dispatch Direct Email Notification to leemsdtt.valortrust@gmail.com
-    await sendEmailNotification({
+    // 2. Dispatch Direct Multi-Channel Notification (Email + Instant Alerts)
+    await sendNotificationAlert({
       formType: "Contact Inquiry",
       fullName: full_name,
       phone,
@@ -63,6 +63,7 @@ export function Contact() {
       preferredSize: preferred_size,
       quantity,
       message,
+      source: "Contact Page Form",
     });
 
     setLoading(false);
@@ -72,7 +73,7 @@ export function Contact() {
     }
 
     toast.success("Inquiry received!", {
-      description: "A direct email notification has been dispatched to leemsdtt.valortrust@gmail.com and our team will get back to you within 4 hours.",
+      description: "Direct notification dispatched to our team. We will review your request and get back to you promptly.",
     });
     form.reset();
   };
@@ -215,6 +216,18 @@ export function Contact() {
           <Button type="submit" variant="hero" size="lg" className="w-full" disabled={loading}>
             {loading ? "Sending..." : "Send Inquiry"}
           </Button>
+
+          <div className="pt-1 text-center">
+            <div className="text-xs text-muted-foreground mb-2">— OR —</div>
+            <a
+              href="https://wa.me/2348039535043?text=Hello%20LeemsDTT%2C%20I%20would%20like%20to%20inquire%20about%20ordering%20palm%20oil."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-medium text-xs transition-colors"
+            >
+              <MessageSquare className="h-4 w-4" /> Need Quick Answers? Chat on WhatsApp
+            </a>
+          </div>
         </form>
       </div>
     </section>

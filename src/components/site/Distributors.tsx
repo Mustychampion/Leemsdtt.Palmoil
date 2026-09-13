@@ -8,7 +8,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { db } from "@/integrations/firebase/client";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { sendEmailNotification } from "@/lib/email";
+import { sendEmailNotification, sendNotificationAlert } from "@/lib/email";
 
 const schema = z.object({
   full_name: z.string().trim().min(1, "Required").max(120),
@@ -61,8 +61,8 @@ export function Distributors() {
       error = e;
     }
 
-    // Direct Email Dispatch to leemsdtt.valortrust@gmail.com
-    await sendEmailNotification({
+    // Direct Multi-Channel Dispatch (Email + Instant Alerts)
+    await sendNotificationAlert({
       formType: "Distributor Application",
       fullName: parsed.data.full_name,
       companyName: parsed.data.business_name,
@@ -70,15 +70,16 @@ export function Distributors() {
       email: parsed.data.email,
       location: parsed.data.region,
       message: parsed.data.capacity,
+      source: "Distributor Application Page",
     });
 
     setLoading(false);
     if (error) {
-      toast.error("Couldn't save to database, but application email was sent", { description: error.message });
+      toast.error("Couldn't save to database, but application alert was sent", { description: error.message });
       return;
     }
     toast.success("Application received!", {
-      description: "Direct email notification dispatched to leemsdtt.valortrust@gmail.com and our distributor team will contact you within 2 business days.",
+      description: "Direct notification dispatched to our team. Our distributor partnerships desk will review and contact you.",
     });
     form.reset();
   };
