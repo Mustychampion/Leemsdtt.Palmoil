@@ -68,7 +68,7 @@ export function About() {
           <p className="text-muted-foreground leading-relaxed text-lg">
             We exist because too many Nigerian buyers — from households to hotels — have been let down by
             adulterated product, unstable supply, and suppliers who disappear after the first order. LeemsDTT
-            was built to be the dependable opposite.
+            was built to be the dependable opposite Since 2024.
           </p>
           <div className="grid sm:grid-cols-2 gap-6 pt-4">
             <div>
