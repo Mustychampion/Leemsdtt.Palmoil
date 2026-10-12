@@ -8,8 +8,9 @@ import { SubmissionsTable } from "@/components/admin/SubmissionsTable";
 import { TeamManagement } from "@/components/admin/TeamManagement";
 import { PriceManagement } from "@/components/admin/PriceManagement";
 import { BlogManagement } from "@/components/admin/BlogManagement";
+import { AnalyticsDashboard } from "@/components/admin/AnalyticsDashboard";
 import { Link } from "@tanstack/react-router";
-import { LogOut, ExternalLink, ShieldCheck, Mail, Users, Tag, Truck, MessageSquare, FileText } from "lucide-react";
+import { LogOut, ExternalLink, ShieldCheck, Mail, Users, Tag, Truck, MessageSquare, FileText, Activity } from "lucide-react";
 import { getSeoMeta } from "@/lib/seo";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -84,8 +85,11 @@ function AdminPage() {
       </header>
 
       <main className="container mx-auto px-6 py-8">
-        <Tabs defaultValue="inquiries" className="space-y-6">
+        <Tabs defaultValue="analytics" className="space-y-6">
           <TabsList className="bg-background border border-border flex flex-wrap h-auto p-1 gap-1">
+            <TabsTrigger value="analytics" className="flex items-center gap-1.5 text-xs">
+              <Activity className="h-3.5 w-3.5 text-primary" /> Site Analytics
+            </TabsTrigger>
             <TabsTrigger value="inquiries" className="flex items-center gap-1.5 text-xs">
               <MessageSquare className="h-3.5 w-3.5" /> Customer Inquiries
             </TabsTrigger>
@@ -108,6 +112,10 @@ function AdminPage() {
               <FileText className="h-3.5 w-3.5" /> Blog Posts
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="analytics" className="space-y-4">
+            <AnalyticsDashboard />
+          </TabsContent>
 
           <TabsContent value="inquiries" className="space-y-4">
             <SubmissionsTable table="inquiries" canEdit={true} canDelete={true} />

@@ -40,6 +40,13 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const url = new URL(request.url);
+      if (url.hostname === "leemsdtt.name.ng") {
+        url.hostname = "www.leemsdtt.name.ng";
+        url.protocol = "https:";
+        return Response.redirect(url.toString(), 301);
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);

@@ -20,6 +20,10 @@ export interface SeoMetaProps {
   path?: string;
   image?: string;
   type?: "website" | "article" | "product";
+  imageWidth?: number | string;
+  imageHeight?: number | string;
+  imageType?: string;
+  imageAlt?: string;
   noIndex?: boolean;
   publishedTime?: string;
   modifiedTime?: string;
@@ -35,14 +39,21 @@ export function getSeoMeta({
   title,
   description,
   path = "/",
-  image = "/images/LEEMSDTT master.png",
+  image = "/images/og-image.jpg",
   type = "website",
+  imageWidth = 1200,
+  imageHeight = 630,
+  imageType = "image/jpeg",
+  imageAlt = "LeemsDTT Premium Red Palm Oil",
   noIndex = false,
   publishedTime,
   modifiedTime,
 }: SeoMetaProps) {
   const canonical = buildCanonicalUrl(path);
-  const fullImageUrl = image.startsWith("http") ? image : `${getSiteUrl()}${image.startsWith("/") ? image : `/${image}`}`;
+  const cleanImage = image.trim().replace(/ /g, "%20");
+  const fullImageUrl = cleanImage.startsWith("http")
+    ? cleanImage
+    : `${getSiteUrl()}${cleanImage.startsWith("/") ? cleanImage : `/${cleanImage}`}`;
 
   const metaTags: Array<{ name?: string; property?: string; content: string }> = [
     { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -55,6 +66,10 @@ export function getSeoMeta({
     { property: "og:type", content: type },
     { property: "og:url", content: canonical },
     { property: "og:image", content: fullImageUrl },
+    { property: "og:image:width", content: String(imageWidth) },
+    { property: "og:image:height", content: String(imageHeight) },
+    { property: "og:image:type", content: imageType },
+    { property: "og:image:alt", content: imageAlt },
     { property: "og:site_name", content: "LeemsDTT Palm Oil & Digital Capabilities" },
     { property: "og:locale", content: "en_NG" },
 

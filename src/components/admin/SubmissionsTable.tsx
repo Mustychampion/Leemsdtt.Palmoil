@@ -103,7 +103,12 @@ export function SubmissionsTable({
       setRows(items);
     } catch (error: any) {
       console.error("Submissions load error:", error);
-      toast.error("Couldn't load submissions", { description: error.message });
+      const isPerm = error.message?.includes("permission") || error.code === "permission-denied";
+      toast.error(`Couldn't load ${table}`, {
+        description: isPerm
+          ? `Missing or insufficient permissions for '${table}'. Update Firestore rules or run 'firebase deploy --only firestore:rules'.`
+          : error.message,
+      });
       setRows([]);
     }
     setLoading(false);

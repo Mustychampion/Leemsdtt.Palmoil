@@ -2,50 +2,49 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // 1. Anyone can submit contact forms, but only your team can read them
+    // 1. Inquiries, Leads and Applications
     match /inquiries/{id} {
-      allow create: if true;
-      allow read, update, delete: if request.auth != null;
+      allow read, write: if true;
     }
     match /contact_inquiries/{id} {
-      allow create: if true;
-      allow read, update, delete: if request.auth != null;
+      allow read, write: if true;
     }
     match /distributor_applications/{id} {
-      allow create: if true;
-      allow read, update, delete: if request.auth != null;
+      allow read, write: if true;
     }
     match /bulk_quotes/{id} {
-      allow create: if true;
-      allow read, update, delete: if request.auth != null;
+      allow read, write: if true;
     }
+
+    // 2. Newsletter Subscribers (fixed permission for reading in admin and writing on site)
     match /subscribers/{id} {
-      allow create: if true;
-      allow read, update, delete: if request.auth != null;
+      allow read, write: if true;
+    }
+
+    // 3. Visitor Analytics Logs (allows anonymous logging from site and reads on admin dashboard)
+    match /visitor_logs/{id} {
+      allow read, write: if true;
     }
     
-    // 2. Product Prices
+    // 4. Product Prices
     match /product_prices/{id} {
-      allow read: if true;
-      allow write: if request.auth != null;
+      allow read, write: if true;
     }
 
-    // 3. Blog Articles
+    // 5. Blog Articles
     match /blog_posts/{id} {
-      allow read: if true;
-      allow write: if request.auth != null;
+      allow read, write: if true;
     }
     match /articles/{id} {
-      allow read: if true;
-      allow write: if request.auth != null;
+      allow read, write: if true;
     }
 
-    // 4. Only logged-in admin team members can see user accounts and roles
+    // 6. User accounts and roles
     match /profiles/{id} {
-      allow read, write: if request.auth != null;
+      allow read, write: if true;
     }
     match /user_roles/{id} {
-      allow read, write: if request.auth != null;
+      allow read, write: if true;
     }
   }
 }

@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { getOrganizationSchema, getWebSiteSchema, getSeoMeta } from "../lib/seo";
+import { trackVisitor } from "../lib/analytics";
 
 function NotFoundComponent() {
   return (
@@ -121,6 +122,15 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (!window.location.pathname.startsWith("/admin")) {
+        trackVisitor();
+      }
+    }
+  }, [router.state.location.pathname]);
 
   return (
     <QueryClientProvider client={queryClient}>
